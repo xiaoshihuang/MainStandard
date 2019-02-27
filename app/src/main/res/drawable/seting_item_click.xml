@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--注意：
+    1.不能给drawable里面xml的item直接设置color
+    2.对应TextView和LinearLayout要设置android:clickable="true"，否则变色器没有效果-->
+
+    <item android:state_pressed="true"><shape>
+        <solid android:color="#a8a8a8"/>
+        <corners android:radius="0dp"/>
+    </shape></item>
+
+    <!--<padding android:left="10dp" android:right="10dp" />
+         <stroke 描边
+                android:width="2dp"
+                android:color="#FFFF00"/>
+    -->
+
+    <item><shape>
+        <!-- 实心，即填充 -->
+        <solid android:color="#ffffff"/>
+        <!-- 描边 -->
+        <corners android:radius="0dp"/>
+    </shape></item>
+
+</selector>

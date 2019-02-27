@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+// 添加插件
+apply plugin: 'com.mob.sdk'
+
+android {
+    compileSdkVersion 23//负责编译的sdk版本
+//    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.xintai.xhao"//applicationId是真正的包名，而不是AndroidManifest里面的package
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "2.4.1"
+//        http://blog.csdn.net/chunloongchow/article/details/51886631
+//        version对应的api：3.0.x对应11,引入Fragment;：4.0.x对应14;5.0对应21;6.0对应23
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        sit {
+            debuggable true
+            minifyEnabled false
+        }
+    }
+}
+
+// 在Mob短信验证，注册SMSSDK的相关信息
+MobSDK {
+    appKey "moba6b6c6d6"
+    appSecret "b89d2427a3bc7ad1aea1e1e8c1d36bf3"
+
+    SMSSDK {}
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:support-v4:23.3.0'
+
+    //Rxjava
+    compile 'io.reactivex:rxandroid:1.2.0'
+    compile 'io.reactivex:rxjava:1.2.0'
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
+    //Okhttp3
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    //Glide
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    compile 'com.google.dagger:dagger:2.7'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
+    //fastJson
+    compile 'com.alibaba:fastjson:1.2.29'
+
+}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xintai.xhao">
+
+    <!-- http://blog.csdn.net/chunloongchow/article/details/51886631
+    		version对应的api：3.0.x对应11,引入Fragment;：4.0.x对应14;5.0对应21;6.0对应23 -->
+
+    <!-- Normal Permissions 不需要运行时注册 -->
+    <!-- 请求网络 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--读取缓存数据-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--用于读取手机当前的状态-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--获取运营商信息，用于支持提供运营商信息相关的接口-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--用于读取蓝牙mac-->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!--用于发送短信-->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.noTitle">
+
+        <activity
+            android:name=".activity.LoadingAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.loading">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.WelcomeAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RegisterAct"
+            android:screenOrientation="portrait"></activity>
+
+        <!--测试隐式启动-->
+        <activity
+            android:name=".activity.SetingAct"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.xintai.xhao.action.SET" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".TestAct"
+            android:screenOrientation="portrait" />
+
+        <!-- 在后台对版本更新下载 -->
+        <service android:name=".service.UpdateService" />
+        <!-- MyApplication初始化一些数据和配置，比如地图，图片，缓存地址，还有一些第三方的 -->
+        <service android:name=".service.MyIntentService">
+            <intent-filter>
+                <action android:name="com.xhao.init_Service" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.xintai.xhao.configuration.GlideConfig"
+            android:value="GlideModule" />
+    </application>
+
+</manifest>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp"
+    android:paddingTop="60dp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="账  号 ："
+            android:textColor="#454545"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/user_name_edit"
+            android:layout_width="fill_parent"
+            android:layout_height="36dp"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:gravity="center_vertical"
+            android:hint="请输入用户名"
+            android:background="@color/transparent"
+            android:paddingLeft="8dp"
+            android:textColor="#333333"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.66dp"
+        android:background="@color/line_color" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="密   码 ："
+            android:textColor="#454545"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/psw1_edit"
+            android:layout_width="fill_parent"
+            android:layout_height="36dp"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:gravity="center_vertical"
+            android:inputType="textPassword"
+            android:hint="请输入密码"
+            android:background="@color/transparent"
+            android:paddingLeft="8dp"
+            android:textColor="#333333"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.66dp"
+        android:background="@color/line_color" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确认密码 ："
+            android:textColor="#454545"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/psw2_edit"
+            android:layout_width="fill_parent"
+            android:layout_height="36dp"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:gravity="center_vertical"
+            android:hint="请再次输入密码"
+            android:inputType="textPassword"
+            android:background="@color/transparent"
+            android:paddingLeft="8dp"
+            android:textColor="#333333"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.66dp"
+        android:background="@color/line_color" />
+
+    <LinearLayout
+        android:id="@+id/phone1_linear"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手 机 号 ："
+            android:textColor="#454545"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/phone_edit"
+            android:layout_width="fill_parent"
+            android:layout_height="36dp"
+            android:inputType="number"
+            android:maxLength="11"
+            android:gravity="center_vertical"
+            android:hint="请输入手机号"
+            android:background="@color/transparent"
+            android:paddingLeft="8dp"
+            android:textColor="#333333"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/phone_line"
+        android:layout_width="fill_parent"
+        android:layout_height="0.66dp"
+        android:background="@color/line_color" />
+
+    <LinearLayout
+        android:id="@+id/phone2_linear"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="验 证 码 ："
+            android:textColor="#454545"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/code_edit"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="36dp"
+            android:digits="0123456789"
+            android:gravity="center_vertical"
+            android:background="@color/transparent"
+            android:paddingLeft="8dp"
+            android:textColor="#333333"
+            android:textSize="15dp" />
+        <TextView
+            android:id="@+id/send_code_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送验证码"
+            android:textColor="#333333"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/code_line"
+        android:layout_width="fill_parent"
+        android:layout_height="0.66dp"
+        android:background="@color/line_color" />
+
+    <Button
+        android:id="@+id/register_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="27dp"
+        android:gravity="center"
+        android:text="注  册"
+        android:background="@drawable/login_color_click"
+        android:textColor="#ffffff"
+        android:textSize="16dp" />
+
+</LinearLayout>
