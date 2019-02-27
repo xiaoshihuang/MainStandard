@@ -55,7 +55,8 @@ public class LoginAct extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_act);
         initView();
-        String xhao = "xionghao2026";
+        String a = "das";
+        String b = "das";
     }
 
     @SuppressLint("WrongViewCast")
