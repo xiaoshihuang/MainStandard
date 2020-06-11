@@ -33,6 +33,10 @@ public class AboutUsAct extends ToolbarActivity {
         setSubContentView(subView);
 
         mid_title.setText("关于我们");
+
+        System.out.println("提交到远程gthub");
+        System.out.println("提交到远程gthub");
+
     }
 
 }
