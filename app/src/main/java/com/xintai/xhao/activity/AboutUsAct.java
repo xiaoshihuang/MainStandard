@@ -36,6 +36,8 @@ public class AboutUsAct extends ToolbarActivity {
 
         System.out.println("提交到远程gthub");
         System.out.println("提交到远程gthub");
+        System.out.println("提交到远程gthub");
+        System.out.println("提交到远程gthub");
 
     }
 
