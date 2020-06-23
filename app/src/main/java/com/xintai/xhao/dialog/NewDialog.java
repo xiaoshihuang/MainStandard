@@ -41,6 +41,7 @@ public class NewDialog extends Dialog {
 	private void create1() {
 		// TODO Auto-generated method stub
 		setContentView(R.layout.dialog_newdialog);
+
 		linear=(LinearLayout) findViewById(R.id.linear);
 		view=findViewById(R.id.view);
 		title=(TextView) findViewById(R.id.title);

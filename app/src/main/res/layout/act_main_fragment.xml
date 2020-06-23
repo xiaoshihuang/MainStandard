@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linear_bottom"
+        android:background="#ededed"></FrameLayout>
+
+    <include
+        layout="@layout/choose_bar"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.66dp"
+        android:layout_alignTop="@+id/linear_bottom"
+        android:background="#b3b3b3" />
+
+</RelativeLayout>

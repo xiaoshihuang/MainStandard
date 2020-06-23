@@ -1,16 +1,10 @@
 package com.xintai.xhao.mode;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,16 +12,12 @@ import android.widget.Toast;
 
 import com.xintai.xhao.F;
 import com.xintai.xhao.MyApplication;
-import com.xintai.xhao.R;
 import com.xintai.xhao.activity.LoadingAct;
 import com.xintai.xhao.bean.AppVersionInfo;
 import com.xintai.xhao.dialog.NewDialog;
 import com.xintai.xhao.network.RequestApi;
-import com.xintai.xhao.service.UpdateService;
-import com.xintai.xhao.utils.FileUtils;
 import com.xintai.xhao.utils.MyLog;
 import com.xintai.xhao.utils.SystemUtils;
-
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,7 +31,6 @@ import rx.Observer;
  * 验证版本信息。如果小于最低版本强制更新；大于最低版本，用户可选择性更新；
  * Created by xionghao on 2018/8/28 0028.
  */
-
 public class CheckVersionMode {
     private LoadingAct loadingAct;
     private String versionName;
@@ -66,7 +55,7 @@ public class CheckVersionMode {
     /**
      * 获取版本信息
      *
-     * @param versionUrl
+     * @param versionUrl 请求版本信息的url
      */
     public void getVersionInfo(String versionUrl) {
         RequestApi.getVersionInfo(versionUrl, new Observer<AppVersionInfo>() {
@@ -85,7 +74,7 @@ public class CheckVersionMode {
             @Override
             public void onNext(AppVersionInfo adverindex) {
                 if (adverindex != null && adverindex.getResultCode().equals("1")) {
-                    dealData(adverindex.getResponseObject());
+                    analysisData(adverindex.getResponseObject());//分析数据
                 } else {
                     MyLog.e("RequestApi.getVersionInfo返回onNext:获取到数据状态不正确");
                 }
@@ -95,11 +84,11 @@ public class CheckVersionMode {
 
     private String downloadurl;
     /**
-     * 处理数据
+     * 分析数据:比较版本，判断是否需要更新。
      *
      * @param responseObject
      */
-    public void dealData(AppVersionInfo.ResponseObjectBean responseObject) {
+    public void analysisData(AppVersionInfo.ResponseObjectBean responseObject) {
         String minversion = responseObject.getMinversion();
         String maxversion = responseObject.getMaxversion();
         downloadurl = responseObject.getDownloadurl();
@@ -134,13 +123,13 @@ public class CheckVersionMode {
 
     public static String downloadDir = "app/download/";
     // 下载状态
-    private final static int DOWNLOAD_COMPLETE = 0;
-    private final static int DOWNLOAD_FAIL = 1;
-    private final static int DOWNLOAD = 2;
+    private final  int DOWNLOAD_COMPLETE = 0;
+    private final  int DOWNLOAD_FAIL = 1;
+    private final  int DOWNLOAD_ING = 2;
     // 下载的百分比
     private int percentage = 0;
     /**
-     * 弹出选择对话框
+     * 弹出选择对话框，更新或者不更新。
      */
     private void chooseDialog(String message, final String downloadurl) {
 //        调用自定义的Dialog
@@ -167,7 +156,7 @@ public class CheckVersionMode {
                 //因为是LoadingAct没必要使用Service,onCreate()里面只干了这一件事情，贯穿整个LoadingAct。
                 newdialog.setButUnClickable(false);
                 newdialog.showProgressbar();
-                // 开启一个新的线程下载
+                // 开启一个新的线程下载,其实这里使用AsyncTask比Handler-Thread更好，因为只有一个后台任务，并且需要更新UI。
                 new Thread(new updateRunnable(),"upDataApk").start();// 这个是下载的重点，是下载的过程
             }
         });
@@ -185,6 +174,7 @@ public class CheckVersionMode {
         });
     }
 
+    //开启线程进行下载最新的Apk
     private class updateRunnable implements Runnable {
         Message message = updateHandler.obtainMessage();
 
@@ -201,7 +191,7 @@ public class CheckVersionMode {
                 }else{
                     downLoadApkFile.createNewFile();
                 }
-                MyLog.i("updateRunnable所在的线程名称："+Thread.currentThread().getName());
+//                MyLog.i("updateRunnable所在的线程名称："+Thread.currentThread().getName());
                 // 下载apk
                 downloaddownLoadApkFile(downloadurl, downLoadApkFile);
             } catch (Exception ex) {
@@ -252,10 +242,13 @@ public class CheckVersionMode {
                 while ((readsize = is.read(buffer)) > 0) {
                     fos.write(buffer, 0, readsize);
                     downloadCount += readsize;
-                    if (downloadCount * 10 / updateTotalSize > num) {
-                        num = num + 1;
+                    if (downloadCount * 10 / updateTotalSize > num) {//downloadCount逢十，则num加一
+                        num++;
+//                        num = downloadCount * 100 / updateTotalSize;//如果想加载动画连贯，那么进度条没走完，就会弹出选择安装的界面。
+//                        MyLog.i("进度："+num);
                         Message message = updateHandler.obtainMessage();
-                        message.what = DOWNLOAD;
+                        message.what = DOWNLOAD_ING;
+//                        message.arg1 = num;
                         updateHandler.sendMessage(message);
                     }
                 }
@@ -283,7 +276,7 @@ public class CheckVersionMode {
     private Handler updateHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            MyLog.i("Handler所在的线程名称："+Thread.currentThread().getName());
+//            MyLog.i("Handler所在的线程名称："+Thread.currentThread().getName());//main主线程
             switch (msg.what) {
                 case DOWNLOAD_COMPLETE:
                     // 点击安装PendingIntent
@@ -301,7 +294,7 @@ public class CheckVersionMode {
                     // 下载失败
                     Toast.makeText(MyApplication.getInstance(),"下载失败",Toast.LENGTH_SHORT).show();
                     break;
-                case DOWNLOAD:
+                case DOWNLOAD_ING:
                     percentage += 10;
                     newdialog.setProgress(percentage);
                     break;
@@ -311,15 +304,19 @@ public class CheckVersionMode {
         }
     };
 
+    //释放对activity的持有
+    public void detachContext(){
+        loadingAct = null;
+    }
 
     /**
      * 获取下载地址上的文件名称
      * */
-    private String SubAppName(String appurl) {
-        String[] splitStr = appurl.split("/");
-        String result = splitStr[splitStr.length - 1];
-        MyLog.i(result);
-        return result;
-    }
+//    private String SubAppName(String appurl) {
+//        String[] splitStr = appurl.split("/");
+//        String result = splitStr[splitStr.length - 1];
+//        MyLog.i(result);
+//        return result;
+//    }
 
 }

@@ -1,4 +1,4 @@
-package com.xintai.xhao.activity;
+package com.xintai.xhao.basecontext;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -37,7 +37,7 @@ public abstract class ToolbarActivity extends AppCompatActivity{
         //android中px与sp,dp之间的转换https://blog.csdn.net/qidingquan/article/details/53714603
         //在mdpi中1dp=1px,在hdpi中1dp=1.5px，在xhdpi中1dp=2px,在xxhpi中1dp=3px。
         //我将42px的图放在xhdpi里面，那么折合成dp就是21.xml里面toolbar的高是42dp，恰好。
-        toolbar.setNavigationIcon(R.mipmap.back1);//要使NavigationIcon竖直居中，需设置android:minHeight="42dp"
+        toolbar.setNavigationIcon(R.mipmap.head_back_img);//要使NavigationIcon竖直居中，需设置android:minHeight="42dp"
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +55,7 @@ public abstract class ToolbarActivity extends AppCompatActivity{
      *
      * @param view
      */
-    public void setContext(View view) {
+    public void setSubContentView(View view) {
         container1.addView(view);
     }
 }

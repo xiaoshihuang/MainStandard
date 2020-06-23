@@ -7,17 +7,17 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:background="#39383c"
-        android:minHeight="42dp" >
+        android:layout_height="44dp"
+        android:background="@color/head_bg"
+        android:minHeight="44dp" >
 
         <TextView
             android:id="@+id/mid_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
+            android:textColor="@color/head_txt"
             android:layout_gravity="center"
-            android:textSize="20dp"/>
+            android:textSize="19dp"/>
 
     </android.support.v7.widget.Toolbar>
 

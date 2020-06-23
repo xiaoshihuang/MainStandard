@@ -22,7 +22,7 @@ public class MyApplication extends Application {
     private static MyApplication myApplication;
 
     @Override
-    public void onCreate() {
+    public void onCreate() {//不要在Application的onCreate里面进行耗时操作，如果需要对第三方进行初始化，需要放在子线程或者Service里面
         super.onCreate();
         this.myApplication = this;
 
@@ -33,15 +33,13 @@ public class MyApplication extends Application {
 //        this.registerReceiver(mBroadcastReceiver,mIntentFilter);
 
         //可以在后台完成地图定位，推送，分享，图片显示等第三方sdk的初始化
-        Intent intent1 = new Intent(this, MyIntentService.class);
-        intent1.putExtra("action","init");
-        this.startService(intent1);
+        Intent mIntent = new Intent(this, MyIntentService.class);
+        mIntent.putExtra("action","MyApplicationInit");
+        this.startService(mIntent);
     }
 
     public static MyApplication getInstance() {
         return myApplication;
     }
-
-
 }
 

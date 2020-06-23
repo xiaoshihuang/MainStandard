@@ -53,7 +53,7 @@ public class OkHttp3Utils {
     //但是getExternalStorageDirectory()下面的缓存不会自动删除
 
     //之前一直有一个疑惑，既然Retrofit已经是对OkHttp的一个封装了，为什么还一直说Retrofit+OkHttp要一起搭配使用，
-    //后来才知道其实OKHttp很重要的一个作用，就是对一些网络请求的配置，例如连接超时，读取超时，以及一些缓存配置等。
+    //后来才知道其实OkHttp很重要的一个作用，就是对一些网络请求的配置，例如连接超时，读取超时，以及一些缓存配置等。
 
     /**
      * 获取OkHttpClient对象；

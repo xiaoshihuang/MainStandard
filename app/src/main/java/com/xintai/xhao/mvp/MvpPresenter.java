@@ -20,12 +20,13 @@ public class MvpPresenter extends BasePresenter<MvpView> {
     //将retrofit返回的数据类型统一为ResponseBody，这样我们在通过view回调数据的时候不需要定义多个方法，
     //通过请求时候传入的methodName来判断，将数据返回给那个请求；
     //在retrofit里面调用请求的时候，我们可以使用反射机制，这样就只需要一个presenter；
+
     /**
      * 获取网络数据
      * @param params 入参
      * @param methedMark 标记是哪个方法请求的
      */
-    public void getData(HashMap<String, String> params, final String methedMark) throws Exception {
+    public void setData(HashMap<String, String> params, final String methedMark) throws Exception {
         //显示正在加载进度条
         getView().showLoading();
 

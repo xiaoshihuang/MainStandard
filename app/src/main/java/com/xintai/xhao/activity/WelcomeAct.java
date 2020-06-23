@@ -1,6 +1,9 @@
 package com.xintai.xhao.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -14,6 +17,7 @@ import android.widget.LinearLayout;
 import com.xintai.xhao.MainActivity;
 import com.xintai.xhao.R;
 import com.xintai.xhao.adapter.WelcomeAdapter;
+import com.xintai.xhao.utils.MyLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +35,8 @@ public class WelcomeAct extends AppCompatActivity{
     private ViewPager viewpager;
     private List<View> viewList = new ArrayList<View>();
     private LinearLayout.LayoutParams params;
-    private Integer[] imgs = new Integer[] { R.mipmap.guide_1,
-            R.mipmap.guide_2,R.mipmap.guide_3};//图片太大会卡顿
+    private int[] imgs = new int[] { R.mipmap.guide_1,
+            R.mipmap.guide_2,R.mipmap.guide_3,R.mipmap.guide_4};//图片太大会卡顿
     private int point_click_width  = 40;//下面被选中指示剂点的直径
     private int point_unclick_width = 22;//下面未被选中指示剂点的直径
 
@@ -46,11 +50,10 @@ public class WelcomeAct extends AppCompatActivity{
 
     private void initData() {
         //添加前面的页面
-        for (int i = 0; i < imgs.length; i++) {
+        for (int i = 0; i < imgs.length-1; i++) {
             ImageView img =new ImageView(this);
             LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             img.setLayoutParams(params);
-            img.setImageResource(imgs[i]);
             img.setScaleType(ImageView.ScaleType.CENTER_CROP);
             viewList.add(img);
         }
@@ -58,7 +61,6 @@ public class WelcomeAct extends AppCompatActivity{
         //单独添加最后的一个页面（由于此页面有跳转）
         LayoutInflater flater = LayoutInflater.from(this);
         View lastPageView = flater.inflate(R.layout.welcome_last, null);
-        lastPageView.setBackgroundResource(R.mipmap.guide_4);
         viewList.add(lastPageView);
         Button enter = (Button) lastPageView.findViewById(R.id.bt_next);
         enter.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +75,7 @@ public class WelcomeAct extends AppCompatActivity{
                 finish();
             }
         });
-        viewpager.setAdapter(new WelcomeAdapter(WelcomeAct.this, viewList));
+        viewpager.setAdapter(new WelcomeAdapter(this, viewList,imgs));
         viewpager.setOnPageChangeListener(new GuidePageChangeListener());
 
         //初始化点的指示剂
@@ -125,6 +127,12 @@ public class WelcomeAct extends AppCompatActivity{
                 linear.getChildAt(i).setLayoutParams(params);
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //经测试viewList里面的ImageView是没有图片资源，不需要手动释放。
     }
 
 }

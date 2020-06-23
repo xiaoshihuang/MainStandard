@@ -3,18 +3,98 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.mob.sdk'
 
 android {
-    compileSdkVersion 23//负责编译的sdk版本
-//    buildToolsVersion "23.0.2"
+    // 负责编译的sdk版本，也就是API Level，对应项目目录外部库External Libraries下面的第一个
+    // 不会被编译到apk中，也就不会改变apk的运行时的行为，仅仅是为IDE（集成开发环境，这里指的android studio）提供编译警告和错误的依据。
+    // 我们强烈推荐总是使用最新的 SDK 进行编译，在现有代码上使用新的编译检查可以获得很多好处，避免使用新弃用的 API ，并且为使用新的 API 做好准备。
+    //当你使用compileSdkVersion版本编程的时候，IDE会检测控件，类，方法等，在minSdkVersion到compileSdkVersion的版本里面是否存在，如果不存在就需要做想后兼容。
+    //要么提升minSdkVersion，要么引人库，要么自定义实现
+    compileSdkVersion 28
+
+    buildToolsVersion "28.0.0" //是你构建工具的版本，其中包括了打包工具aapt、dx等等。这个工具的目录位于..your_sdk_path/build-tools/XX.XX.XX
 
     defaultConfig {
-        applicationId "com.xintai.xhao"//applicationId是真正的包名，而不是AndroidManifest里面的package
-        minSdkVersion 15
-        targetSdkVersion 23
+        //applicationId是真正的包名，而不是AndroidManifest里面的package
+        applicationId "com.xintai.xhao"
+
+        //表示应用支持的最低api，比如minSdkversion设置的是23，那么android6.0以下的手机就安装不了本App
+        //又假如你的应用下包含三个库，它们的 minSdkVersion 分别是 14, 17 和 23 ，那么你的 minSdkVersion 必需至少是23才能使用它们。
+        //又比如我设置的minSdkVersion 14，我用到某个api17才有的显示时间控件TextClock写入xml，编译就会报错。--解决方案：需要更改最小minSdkVersion为17，或者自定义控件。https://bbs.csdn.net/topics/391924776?page=1
+        minSdkVersion 23 //api23 对应的是android6.0系统，生产于2015年。以5年前的手机作为最低适配范围的应该算比较合理吧，通常一个安卓手机也就3年使用寿命。
+
+        //targetSdkVersion是向前Forward(未来)兼容的依据；（向前向后兼容，个人觉得是以targetSdkVersion为标准的，比如比targetSdkVersion大就是前）
+        //向前兼容的必要性？假如你编写App的compileSdkVersion=28，那么api29就没有经过IDE的编译检测，当api28里面有个方法在api29里面删除，那么系统是api29的手机运行你的api28编写的App会发生什么？
+        //每年发布新版本手机的时候，类似情况就很普遍。
+        //解决办法就是使用targetSdkVersion。
+        //如果实际android版本号高于targetSdkVersion那么手机会按照targetSdkVersion设置的版本号来运行。当实际android版本号不高于targetSdkVersion时按照实际的手机版本号运行apk。
+        //targetSdkVersion值越大，支持的api范围就越大，当然向后兼容难度就越大。
+        targetSdkVersion 28  //正解https://blog.csdn.net/Yoryky/article/details/78016970
+        //什么是向后Backwards(回头)兼容？
+        //也来举个例子说明，我们知道Material Design是随android 5.0版本推出来的设计规范。那么我想android 4.0的手机也能使用，怎么办？着就是向后兼容的问题了。
+        //android 向后兼容通常是通过支持库(support library)来实现的。比如appcompat-v4、appcompat-v7使得低版本手机可以支持Material Design。
+
+        //三者关系minSdkVersion<targetSdkVersion<=compileSdkVersion
+        //minSdkVersion表示我们App能支持的最低api版本
+        //compileSdkVersion编译api，建议使用最新的，因为最新的api更完善更加丰富，同时也是趋势
+        //targetSdkVersion向前兼容依据，
+
+        //低操作系统的手机能不能运行高版本api编写的app？
+        //在满足app最低minSdkVersion前提下，是可以运行的。
+        //注意，在使用高版本api编写app的时候，如果某个方法或者控件，在某低版本（满足minSdkVersion）里面不存在，IDE(即android studio)会提醒或者报错，就是向后兼容。
+        //解决办法：1.引人支持库，比如v4和v7；2.修改mindkVersion;3.如果是控件不存在，可以自定义来实现控件，比如上面说到的TextClock.
+
+        //高版本的手机能运行低版本api编写的App吗？
+        //可以运行，且普遍存在。
+        //比如你是api23开发的App，当我使用刚推出的android10.0的手机运行此App的时候，有个方法api23有，api29已经删除了。那么我手机运行你App会怎么样？
+        // 典型的向前兼容，会根据App设置的targetSdkVersion的api版本来运行。
+        //如果手机android版本号高于targetSdkVersion那么手机会按照targetSdkVersion设置的版本号来运行。当实际android版本号不高于targetSdkVersion时按照实际的手机版本号运行apk。，
+
+        //versionCode和versionName是可以自定义的，作用于版本更新。
         versionCode 1
         versionName "2.4.1"
-//        http://blog.csdn.net/chunloongchow/article/details/51886631
-//        version对应的api：3.0.x对应11,引入Fragment;：4.0.x对应14;5.0对应21;6.0对应23
+
+//        安卓系统版本对应的api以及api的新特性，https://blog.csdn.net/qq_21399461/article/details/80277472
+//        安卓系统版本升级为了完善以前的功能和添加新的功能。
+//        而api是android sdk对外提供的接口，让开发者可以使用这些新的功能。
+
+//        安卓第一版Android1.1发布于2008.09；
+//        常见的android版本对应的api,6.0--23，7.0--24，8.0--26，9.0--28
+//        帮助记忆：6.0对应23，6.0和9.0一个版本，7.0和8.0两个版本。
+//        目前使用的测试机是荣耀20i,系统是android10.0,对应的api是29.
+//
+//        Android5系列--L，发布于2014年；Android6--M，发布于2015年；
+//        Android7--N，发布于2016年；Android8--O，发布于2017年；Android9--P，发布于2018.08；
+//        Android10.0--Q,发布于2019年；刚好一年一个大版本。
+//        Android10.0新特性https://blog.csdn.net/yingchengyou/article/details/99717498?depth_1-utm_source=distribute.pc_relevant_right.none-task&utm_source=distribute.pc_relevant_right.none-task
+
+        //从事android开发3年后，你会思考以下几个问题：
+        //一个app怎么适配不同的版本的手机，这个就是一个兼容性的问题？
+        //有些兼容性问题IDE不会给出报错提示，但是在不同版本手机上运行的时候会出现状况。
+        //有些兼容性问题会被IDE检测出来，修改后才能通过编译。
+
+        //compileSdkVersion,targetSdkVersion,minSdkVersion你是怎么理解的，三者什么关系
+
+        //你关心过最新版本api有哪些重大的改动和新特性吗？
+
+        //你有阅读过源码吗
+
+        //framework层你了解吗？
+
+        //你开发中遇到过哪些难题，怎么解决的？
+        //从事安卓开发也有些年头了，不同时期遇到的问题和解决问题的方法也不同。
+        //刚参加工作的时候，项目经验少，遇到的问题多些，那时候会自己动手百度，百度解决不了，就会请教同事或者主管，然后记录下来
+        //后来工作几年后，遇到的问题就少很多了，但是问题就更加棘手了，
+        //比如在信泰工作的时候，信泰保险App是给公司自己的业务员使用的，但是大多数业务员的手机都是很老旧的，结果有些业务员手机要么安装不上，要么有些功能失灵？
+        //最后不得不调整minSdkVersion,和重新做兼容，工作量很大。
+        //还有一次，接手一个项目，项目不复杂，但是经历过几个开发人员，每个人用的框架和引用包不同，有的开发人员为了一个控件都会引人一个比较大的库，
+        // 导致项目很臃肿，方法数目超过65536，项目不能打包成Apk，不得不分包。
+        //当时遇到也是第一次遇到这个问题，自己百度资料也倒腾了很久，而且每次上传到应用商城都需要分包比较麻烦，后来就抽空就每次一点点把项目瘦身，去掉哪些没必要或者臃肿的代码。
+
+        //你的优点和缺点？
+        //答：优点，对工作责任心强，比如看到代码太臃肿，可读性差，我会对代码进行整理重构，添加详细注解。还有能够主动接纳和学习新的事物，来充实自己。
+        //缺点，性格有点内向，和新同事相处属于慢热型，但是熟悉后又比较活跃。
+
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -38,8 +118,10 @@ MobSDK {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:support-v4:23.3.0'
+
+    //需要注意最新的api都有哪些改动和新功能
+    compile 'com.android.support:appcompat-v7:28.0.0'
+    compile 'com.android.support:support-v4:28.0.0'
 
     //Rxjava
     compile 'io.reactivex:rxandroid:1.2.0'
@@ -53,10 +135,14 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     //Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
-
+    //注解dagger
     compile 'com.google.dagger:dagger:2.7'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
     //fastJson
     compile 'com.alibaba:fastjson:1.2.29'
+    //添加欢迎引导页/广告的Banner轮播
+    implementation 'com.youth.banner:banner:1.4.10'
+    //recyclerview
+    compile 'com.android.support:recyclerview-v7:28.0.0'
 
 }

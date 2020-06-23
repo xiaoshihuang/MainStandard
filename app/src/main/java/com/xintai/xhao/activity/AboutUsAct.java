@@ -37,6 +37,7 @@ public class AboutUsAct extends ToolbarActivity {
         System.out.println("新创建的文件需要add");
         System.out.println("先commit提交到本地仓库");
         System.out.println("在push提交到远程仓库");
+        System.out.println("项目一起提交");
 
     }
 

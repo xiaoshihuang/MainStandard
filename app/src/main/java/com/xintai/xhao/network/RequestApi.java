@@ -50,7 +50,6 @@ public class RequestApi extends RetrofitUtils {
 
         @GET("/agentwap/wap/app/userlogin.do")
         Observable<ResponseBody> getRegisterInfo(@QueryMap HashMap<String, String> map);
-
     }
 
     /**
@@ -63,6 +62,7 @@ public class RequestApi extends RetrofitUtils {
         setSubscribe(service.getVersionInfo(url), observer);
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////自己尝试反射，不需要写Mode(非常规写法)
     /**
      * 作用在mvp模式里面presenter，取代mode;
      * 调用NetService里面具体的请求方法;

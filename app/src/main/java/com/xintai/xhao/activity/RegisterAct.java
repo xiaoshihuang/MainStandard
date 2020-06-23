@@ -43,11 +43,11 @@ import okhttp3.ResponseBody;
 
 /**
  * Created by xionghao on 2018/9/13 0013.
- * <p/>MVP最大的优势就是解耦，让各个位置各司其职，条例清晰，最大的缺点就是代码量比较大；
+ * <p/>MVP最大的优势就是解耦，让各个位置各司其职，条例清晰，缺点就是代码量比较大；
  * <p/>而我这里经过一些优化，即实现了MVP的优势，又克服了MVP代码量大的缺点；
  * <P/>改变1，我们用retrofit取代Mode,你有没发现2者本来就很类似，对数据进行请求，然后返回给Presenter;
  * <p/>改变2，对应retrofit返回的数据不解析，保留ResponseBody类型
- * <p/>改变3，通过反射调用retrofi的接口api
+ * <p/>改变3，通过反射调用retrofit的接口api
  * <p/>这3个改变让我们只需要,在retrofit接口api文件里面配置请求方法，然后在Ui界面接受返回数据即可。
  */
 
@@ -66,7 +66,7 @@ public class RegisterAct extends BaseActivity implements MvpView,View.OnClickLis
         View subView = LayoutInflater.from(this).inflate(
                 R.layout.register_act, null);
         setContext(subView);
-        mid_title.setText("注册");
+        headLayout.setTitle("注册");
 
         user_name_edit = (EditText) subView.findViewById(R.id.user_name_edit);
         psw1_edit = (EditText) subView.findViewById(R.id.psw1_edit);
@@ -161,7 +161,7 @@ public class RegisterAct extends BaseActivity implements MvpView,View.OnClickLis
                                 try {
                                     //注意：1.这里的register是自定义的，我们需要到retrofit的接口Api里面设置接口方法，方法名称对应这里的register
                                     //2.register还有一个用途是在showData里面判断是哪个接口返回的数据
-                                    mvpPresenter.getData(params,"register");
+                                    mvpPresenter.setData(params,"register");
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

@@ -57,6 +57,7 @@ public class LoginAct extends AppCompatActivity implements View.OnClickListener{
         System.out.println("提交到远程github");
         System.out.println("提交到远程github");
         System.out.println("提交到远程github");
+        System.out.println("项目一起提交");
     }
 
     @SuppressLint("WrongViewCast")

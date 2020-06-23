@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xintai.xhao">
 
-    <!-- http://blog.csdn.net/chunloongchow/article/details/51886631
-    		version对应的api：3.0.x对应11,引入Fragment;：4.0.x对应14;5.0对应21;6.0对应23 -->
-
     <!-- Normal Permissions 不需要运行时注册 -->
     <!-- 请求网络 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,7 +11,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!--用于读取手机当前的状态-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!--用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <!--用于访问wifi网络信息，wifi信息会用于进行网络定位，access访问-->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!--获取运营商信息，用于支持提供运营商信息相关的接口-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -44,6 +41,9 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.MainFragementAct"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".activity.WelcomeAct"
@@ -53,7 +53,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.RegisterAct"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.RecyclerViewAct"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.AboutUsAct"
+            android:screenOrientation="portrait"/>
 
         <!--测试隐式启动-->
         <activity

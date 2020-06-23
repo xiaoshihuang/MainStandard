@@ -27,6 +27,7 @@ import com.xintai.xhao.MyApplication;
 import com.xintai.xhao.R;
 import com.xintai.xhao.mode.CheckVersionMode;
 import com.xintai.xhao.service.UpdateService;
+import com.xintai.xhao.utils.FastjsonUtils;
 import com.xintai.xhao.utils.MyLog;
 import com.xintai.xhao.utils.SharedPreferencesHelp;
 import com.xintai.xhao.utils.SystemUtils;
@@ -43,6 +44,8 @@ import java.io.InputStream;
 
 public class LoadingAct extends AppCompatActivity {//AppCompatActivity是ActionBarActivity的父类,Compat兼容的意思
 
+    private CheckVersionMode checkVersionMode;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +61,13 @@ public class LoadingAct extends AppCompatActivity {//AppCompatActivity是ActionB
         //2.继承AppCompatActivity实现去标题栏和全屏，一般通过设置自定义主题
         //parent="Theme.AppCompat.DayNight.NoActionBar"
         //<item name="android:windowFullscreen">true</item><!-- 设置全屏-->
+        // 去掉AppcompaActivity的标题栏方法：
+        //        if (getSupportActionBar()!=null){
+        //            getSupportActionBar().hide();
+        //        }
 
         setContentView(R.layout.loading_act);
-        //解决进入Loading页面先白或者黑一下后，再显示Loading的图片，其实不应该在onCreate里面设置图片，而是在activity的主题里面设置背景。
+        //解决：进入Loading页面先白或者黑一下后，再显示Loading的图片，其实不应该在xml里面设置图片，而是在activity的主题里面设置背景。
 
         //        float scale=this.getResources().getDisplayMetrics().density;
         //        MyLog.i("density======"+scale);
@@ -78,28 +85,16 @@ public class LoadingAct extends AppCompatActivity {//AppCompatActivity是ActionB
         //3.ScaleType.CENTER_INSIDE（全图）：将图片大小大于ImageView的图片进行等比例缩小，直到整幅图能够居中显示在ImageView中，小于ImageView的图片不变，直接居中显示。
         //4.ScaleType.FIT_CENTER：ImageView的默认状态，大图等比例缩小，使整幅图能够居中显示在ImageView中，小图等比例放大，同样要整体居中显示在ImageView中。
 
-        //将activity作为参数传递进去，然后实现回调是不可取的，可能造成内存泄漏，但是模块里面存在展示Dialog，这样写会让Activity看着简洁。
-        CheckVersionMode checkVersionMode = new CheckVersionMode(LoadingAct.this);
+        //将activity作为参数传递进去，其实和mvp模式里面传递过去的MvpView是一样的。
+        //其实这样的请求方式就是一个框架模式MVP的雏形。
+        checkVersionMode = new CheckVersionMode(LoadingAct.this);
         //下面url是掌上信泰的验证版本的地址
         String versionUrl = "https://mobile.xintai.com/agentwap/wap/app/userlogin.do?action=checkversion&plateType=android";
         checkVersionMode.getVersionInfo(versionUrl);
-
-        //        String s1 = "abc";
-        //        String s2 =new String("abc");
-        //        String s3  = "abc";
-        //        if(s1==s2){
-        //            MyLog.i("s1==s2");
-        //        }else{
-        //            MyLog.i("s1!=s2");
-        //        }
-        //        MyLog.i("获取s1地址"+s1.hashCode());
-        //        MyLog.i("获取s2地址"+s2.hashCode());
-        //        MyLog.i("获取s3地址"+s3.hashCode());
-
     }
 
     /**
-     * 模拟版本验证后,判断下一步跳转页面
+     * 模拟版本验证后,判断下一步跳转页面6
      */
     public void goNextActivity() {
         F.userName = SharedPreferencesHelp.getSharedPreferences().getString("userName", "");
@@ -111,7 +106,8 @@ public class LoadingAct extends AppCompatActivity {//AppCompatActivity是ActionB
             Intent intent = new Intent(this, WelcomeAct.class);
             startActivity(intent);
         } else {
-            if (TextUtils.isEmpty(F.userName) || TextUtils.isEmpty(F.userId)) {//强制登录
+            //强制登录
+            if (TextUtils.isEmpty(F.userName) || TextUtils.isEmpty(F.userId)) {
                 //                        SharedPreferencesHelp.myEdit.putString("UserName", "xhao");
                 //                        SharedPreferencesHelp.myEdit.putString("UserId", "001").commit();
                 Intent intent = new Intent(LoadingAct.this, LoginAct.class);
@@ -138,4 +134,10 @@ public class LoadingAct extends AppCompatActivity {//AppCompatActivity是ActionB
         finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //Mode里面持有activity的引用，为了让activity能够顺利释放资源，避免造成内存泄漏，在activity销毁前，给引用赋值为null
+        checkVersionMode.detachContext();
+    }
 }

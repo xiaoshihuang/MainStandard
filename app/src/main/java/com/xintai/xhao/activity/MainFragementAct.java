@@ -44,7 +44,7 @@ public class MainFragementAct extends FragmentActivity implements View.OnClickLi
         }
         setContentView(R.layout.act_main_fragment);
         initView();
-
+        System.out.println("项目一起提交");
     }
 
     private void initView() {

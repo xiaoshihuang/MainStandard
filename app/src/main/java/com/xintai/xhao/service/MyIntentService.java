@@ -25,10 +25,15 @@ public class MyIntentService extends IntentService {
     //看IntentService的源码就知道，为什么只需要复写这个方法
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        MyLog.i("MyIntentService运行onHandleIntent");
-        String action = intent.getStringExtra("action");
-        if("init".equals(action)){
 
+        String action = intent.getStringExtra("action");
+        if("MyApplicationInit".equals(action)){
+            MyLog.i("在MyApplication里面开启一个Service对第三方进行初始化");
+            //地图
+            //分享
+            //推送
+            //统计
+            //图片加载器
         }
 
     }
