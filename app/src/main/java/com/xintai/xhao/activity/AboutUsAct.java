@@ -34,7 +34,7 @@ public class AboutUsAct extends ToolbarActivity {
 
         mid_title.setText("关于我们");
 
-        System.out.println("提交到远程gthub");
+
 
     }
 
