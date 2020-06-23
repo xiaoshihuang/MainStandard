@@ -44,7 +44,12 @@ public class MainFragementAct extends FragmentActivity implements View.OnClickLi
         }
         setContentView(R.layout.act_main_fragment);
         initView();
-        System.out.println("提交到远程gthub");
+        System.out.println("提交到远程github");
+        System.out.println("提交到远程github");
+        System.out.println("提交到远程github");
+        System.out.println("提交到远程github");
+        System.out.println("提交到远程github");
+
     }
 
     private void initView() {
